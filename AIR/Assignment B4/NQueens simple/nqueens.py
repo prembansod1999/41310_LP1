@@ -4,7 +4,7 @@ N = int(input())
 
 #chessboard
 #NxN matrix with all elements 0
-board = [[0]*N for _ in range(N)]
+board = [[0 for i in range(N)] for j in range(N)] 
 
 def is_attack(i, j):
     #checking if there is a queen in row or column
@@ -41,8 +41,12 @@ def N_queen(n):
 stat = N_queen(N)
 
 if stat == True:
-    for i in board:
-        print (i)
+    for i in range(N): 
+      for j in range(N): 
+        print(board[i][j], end = " ") 
+      print() 
 
 else:
     print("No result possible")
+    
+#O(n!)

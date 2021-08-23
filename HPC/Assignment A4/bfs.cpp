@@ -1,62 +1,73 @@
-#include<iostream>
+#include <bits/stdc++.h>
 #include<omp.h>
 using namespace std;
+typedef pair<int, int> pi;
 
-int q[100];
-int visited[7];
-int local_q;
+vector<vector<pi>> graph;
 
-void bfs(int adj_matrix[7][7], int first, int last, int q[], int n_nodes) 
+// Function For Implementing Best First Search
+// Gives output path having lowest cost
+void best_first_search(int source, int target, int n)
 {
-    if(first==last)
-      return;
-    
-    int cur_node = q[first++];
-    cout<<cur_node<<" ";
-    
-    omp_set_num_threads(3);
-    
-    #pragma omp parallel for shared(visited)
-    for(int i=0; i<n_nodes; i++) 
-    {
-        if(adj_matrix[cur_node][i] == 1 && visited[i] == 0)
-        {
-            q[last++] = i;
-            visited[i] = 1;
-        }
-    }
-    bfs(adj_matrix, first, last, q, n_nodes);
+	vector<bool> visited(n, false);
+	// MIN HEAP priority queue
+	priority_queue<pi, vector<pi>,greater<pi>> pq;
+	// sorting in pq gets done by first value of pair
+	pq.push(make_pair(0, source));
+	visited[source] = true;
+
+	while (!pq.empty()) {
+		int x = pq.top().second;
+		// Displaying the path having lowest cost
+		cout << x << " ";
+		pq.pop();
+		if (x == target)
+			break;
+		#pragma omp parallel for
+		for (int i = 0; i < graph[x].size(); i++) {
+		#pragma omp critical
+		{
+			if (!visited[graph[x][i].second]) {
+				visited[graph[x][i].second] = true;
+				pq.push(graph[x][i]);
+			}
+		}
+		}
+	}
+	cout<<endl;
 }
 
-int main() 
+// Driver code to test above methods
+int main()
 {
-    int first = -1;
-    int last = 0;
-    int n_nodes = 7;
-    
-    for(int i=0; i<n_nodes; i++) 
-    {
-        visited[i] = 0;
-    }
-    
-    int adj_matrix[7][7] = {
-      {0, 1, 1, 0, 0, 0, 0},
-      {1, 0, 1, 1, 0, 0, 0},
-      {1, 1, 0, 0, 1, 0, 0},
-      {0, 1, 0, 0, 1, 0, 0},
-      {0, 0, 1, 1, 0, 1, 0},
-      {0, 0, 0, 0, 1, 0, 1},
-      {0, 0, 0, 0, 0, 1, 0}
-    };
-    
-    int start_node = 3;
-    q[last++] = start_node;
-    first++;
-    visited[start_node] = 1;
- 
-    bfs(adj_matrix, first, last, q, n_nodes);
-    cout<<endl;
-    
-    return 0;
-    
+	int v,inp,x,y,cost;
+	cout<<"Enter number of vertices\n";
+	cin>>v;
+	graph.resize(v);
+	do
+	{
+		cout<<"1.Add Edge\n2.Exit\n";
+		cin>>inp;
+		if(inp == 2)
+		{
+			break;
+		}
+		else
+		{
+		  cout<<"Enter start vertex, destination vertex,cost of the path\n";
+		  cin>>x>>y>>cost;
+		  graph[x].push_back(make_pair(cost, y));
+		  graph[y].push_back(make_pair(cost, x));
+		}
+		
+	}while(inp==1);
+	
+	int source = 0;
+	int target = 4;
+
+	// Function call
+	best_first_search(source, target, v);
+
+	return 0;
 }
+

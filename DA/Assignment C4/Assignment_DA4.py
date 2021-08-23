@@ -36,7 +36,7 @@ x = x.map(lambda a: clean_sentences(a))
 x.head()
 
 from sklearn.model_selection import train_test_split
-x_train, x_test, y_train, y_test = train_test_split(x,y,stratify=y,random_state=42)
+x_train, x_test, y_train, y_test = train_test_split(x,y,stratify=y,random_state=0)
 
 x_train.head()
 
@@ -44,9 +44,11 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 vectorizer = TfidfVectorizer(stop_words='english')
 x_train = vectorizer.fit_transform(x_train)
 x_test = vectorizer.transform(x_test)
+
 from sklearn.svm import LinearSVC
-model = LinearSVC(C=1.05, tol=0.5)
+model = LinearSVC()
 model.fit(x_train,y_train)
+
 from sklearn.metrics import confusion_matrix, accuracy_score, precision_score, f1_score, recall_score
 confusion_matrix(y_test,model.predict(x_test))
 

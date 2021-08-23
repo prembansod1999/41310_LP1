@@ -324,7 +324,7 @@ class GoalStackPlanner:
                 all_preconditions_satisfied = True
 
                 # Check if any precondition is unsatisfied and push it onto program stack
-                for predicate in operation.delete():
+                for predicate in operation.precondition():
                     if predicate not in world_state:
                         all_preconditions_satisfied = False
                         stack.append(predicate)
@@ -351,7 +351,6 @@ class GoalStackPlanner:
 
                 # Replace Unsatisfied Goal with an action that can complete it
                 action = unsatisfied_goal.get_action(world_state)
-
                 stack.append(action)
                 # Push Precondition on the stack
                 for predicate in action.precondition():
@@ -363,16 +362,16 @@ class GoalStackPlanner:
 
 if __name__ == '__main__':
     initial_state = [
-        ON('B', 'A'),
-        ONTABLE('A'), ONTABLE('C'), ONTABLE('D'),
-        CLEAR('B'), CLEAR('C'), CLEAR('D'),
+        ON('B','A'),
+        ONTABLE('A'),ONTABLE('C'),ONTABLE('D'),
+        CLEAR('B'),CLEAR('C'),CLEAR('D'),
         ARMEMPTY()
     ]
 
     goal_state = [
-        ON('B', 'D'), ON('C', 'A'),
-        ONTABLE('D'), ONTABLE('A'),
-        CLEAR('B'), CLEAR('C'),
+        ON('C','A'),ON('B','D'),
+        ONTABLE('D'),ONTABLE('A'),
+        CLEAR('B'),CLEAR('C'),
         ARMEMPTY()
     ]
 

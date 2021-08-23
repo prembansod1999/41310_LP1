@@ -1,64 +1,47 @@
-#include<omp.h>
 #include<bits/stdc++.h>
+#include<omp.h>
 using namespace std;
-#define n 1000
 
-
-void bubbleSort(int arr[])
-{
-	 for (int i = 0; i < n-1; i++) 
-	 {
-	    int x = i%2;
-	    #pragma omp parallel for
-            for (int j = x; j < n-1; j++)
-            { 
-                if (arr[j] > arr[j+1]) 
-                { 
-                    int temp = arr[j]; 
-                    arr[j] = arr[j+1]; 
-                    arr[j+1] = temp; 
-                }
-             }
-          } 
+void swap(int &x,int &y) {
+    int t=x;
+    x=y;
+    y=t;
 }
+int main() {
+    cout<<"Bubble Sort\n\n";
+    int n=20000;
+    vector<int> v,vv;
+    for(int i=0;i<n;i++)
+        v.push_back(rand()%n);
+    vv=v;
 
-void init_array(int arr[])
-{
-	for(int i = 0;i<n;i++)
-	{
-		arr[i] = rand()%10000;
-	}
-} 
-void print(int arr[])
-{
-	cout<<endl;
-	for(int i = 0;i<n;i++)
-	{
-		cout<<arr[i]<<" ";
-	}
-	cout<<endl;	
-}
+    double st=omp_get_wtime();
+    for(int i=0;i<n;i++) {
+        int k=i%2;
+        #pragma omp parallel for
+        for(int j=k;j<n-1;j+=2){
+            if(v[j]>v[j+1])
+                swap(v[j],v[j+1]);
+        }
+    }
+    double en=omp_get_wtime();
+
+    double st1=omp_get_wtime();
+    for(int i=0;i<n;i++)
+    {
+        int k=i%2;
+        for(int j=k;j<n-1;j+=2)
+        {
+            if(vv[j]>vv[j+1])
+                swap(vv[j],vv[j+1]);
+
+        }
+    }
+    double en1=omp_get_wtime();
+
+    cout<<"Parallel Time : "<<en-st<<endl;
+    cout<<"Serial Time : "<<en1-st1<<endl;
 
 
-int main()
-{
-	int *arr = new int[n];
-	cout<<"\nInitial Array\n";
-	init_array(arr);
-	print(arr);
-	
-	double start,end;
-	start = omp_get_wtime();
-	
-	bubbleSort(arr);
-	
-	end = omp_get_wtime();
-	
-	double time_taken = end - start;
-	
-	cout<<"\nTime Taken = "<<time_taken<<endl;
-	
-	cout<<"\nSorted Array\n";
-	print(arr);
-	return 0;
+    return 0;
 }

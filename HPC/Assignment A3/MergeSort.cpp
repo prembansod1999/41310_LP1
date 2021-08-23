@@ -89,24 +89,20 @@ void init_array(int arr[])
    
 int main() 
 {	int *arr = new int[n];
-	
+	clock_t t;
 	init_array(arr);
 	
 	cout<<"\nInitial Array\n";
 	
 	print(arr);
 	
-	double start, end;
-    	start = omp_get_wtime();
-	
+	t = clock();
 	mergeSort(arr,0,n-1);
-	
-	end = omp_get_wtime();
-	
-	double time_taken = (end-start);
-	
-	cout<<"\nTime Taken = "<<time_taken<<endl;
+	t = clock() - t;
+    	double time_taken = ((double)t)/CLOCKS_PER_SEC; // in seconds	
 
+	cout<<"\nTime Taken = "<<time_taken<<endl;
+	
 	cout<<"\nSorted Array\n";
 	
 	print(arr);

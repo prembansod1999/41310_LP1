@@ -2,32 +2,32 @@ from nltk.chat.util import Chat, reflections
 
 pairs = [
             [
-                r"my name is(.*)",
-                ["Hello %1, how are you today?",]
-            ],
-            [
                 r"what is your name?",
                 ["My name is Jarvis and I will help you with your finacial queries today.",]
             ],
             [
-                r"where to put(.*)money",
-                ["Basically there are many options to invest- 1.Regional and 2.Stocks.\nIn which section would you like to invest?",]
+                r"what are different investment options",
+                ["Basically there are many options to invest\n1.Regional\n2.Stocks.\nIn which section would you like to invest?",]
             ],
             [
-                r"Regional(.*)",
-                ["There are many- SBI,HSBC,DB. Which bank would you like to go for?",]
+                r"(.*)Regional(.*)",
+                ["There are many- SBI,HDFC,PNB. Which bank would you like to go for?",]
             ],
             [
-                r"SBI(.*)",
+                r"(.*)SBI(.*)",
                 ["SBI offers 10 percent Interest.",]
             ],
             [
-                r"DB(.*)",
-                ["DB offers 09 percent Interest.",]
+                r"(.*)HDFC(.*)",
+                ["HDFC offers 09 percent Interest.",]
             ],
             [
-                r"HSBC(.*)",
-                ["HSBC offers 11 percent Interest.",]
+                r"(.*)PNB(.*)",
+                ["PNB offers 11 percent Interest.",]
+            ],
+            [
+                r"maximum investment amount",
+                ["No limit",]
             ],
             [
                 r"(.*)Stocks(.*)",
@@ -43,11 +43,15 @@ pairs = [
             ],
             [
                 r"hi|hey|hello(.*)",
-                ["Hello", "Hey there",]
+                ["Hi nice to see you!",]
             ],
             [
-                r"quit",
-                ["Signing out, see you again ^_^",]
+                r"quit|bye",
+                ["Goodbye ! It was nice to talk to you",]
+            ],
+            [
+            	r"(.*)",
+                ["Sorry didn't got it",]
             ],
         ]
 
